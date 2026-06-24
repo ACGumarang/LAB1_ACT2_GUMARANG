@@ -26,7 +26,7 @@
 
     /* Form Title/Header effect if you add one later */
     form::before {
-      content: "MOVIE SURVEY";
+      content: "🎬 MOVIE SURVEY";
       display: block;
       text-align: center;
       font-size: 1.5rem;
@@ -48,6 +48,8 @@
     
     /* Sleek Inputs */
     input[type="text"],
+    input[type="number"],
+    input[type="date"],
     select,
     textarea {
       width: 100%;
@@ -63,6 +65,8 @@
     
     /* Premium Focus Highlight */
     input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
     select:focus,
     textarea:focus {
       border-color: #ffcc00; /* Hollywood Gold */
@@ -86,7 +90,7 @@
       letter-spacing: 1px;
     }
 
-    /* Radio button alignments */
+    /* Checkbox & Radio button alignments */
     fieldset label {
       display: flex;
       align-items: center;
@@ -96,10 +100,31 @@
       color: #ccc;
     }
 
-    fieldset input[type="radio"] {
+    fieldset input[type="radio"],
+    fieldset input[type="checkbox"] {
       margin-right: 10px;
       accent-color: #ffcc00; 
       transform: scale(1.1);
+    }
+
+    /* Range Slider Styling */
+    .slider-container {
+      margin-top: 8px;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: #e50914;
+      background: #444;
+      height: 6px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .slider-output {
+      display: block;
+      text-align: right;
+      color: #ffcc00;
+      font-weight: bold;
+      margin-top: 5px;
     }
     
     button {
@@ -131,22 +156,32 @@
 <body>
 
 <form id="googleForm">
-  <label for="name">Name</label>
-  <input type="text" name="name" id="name" required>
+  <label for="name">Your Name</label>
+  <input type="text" name="name" id="name" required placeholder="John Doe">
 
-
-  <label for="movieName">Movie Name</label>
+  <label for="movieName">Movie Title</label>
   <input type="text" name="movieName" id="movieName" required placeholder="e.g., Inception">
 
-  
+  <!-- NEW ELEMENT: Watch Date input -->
+  <label for="watchDate">When did you last watch it?</label>
+  <input type="date" name="watchDate" id="watchDate">
+
+
   <fieldset>
-    <legend>Genre</legend>
+    <legend>Primary Genre</legend>
     <label><input type="radio" name="genre" value="Horror"> Horror</label>
     <label><input type="radio" name="genre" value="Action"> Action</label>
     <label><input type="radio" name="genre" value="Comedy"> Comedy</label>
     <label><input type="radio" name="genre" value="Sci-Fi"> Sci-Fi</label>
     <label><input type="radio" name="genre" value="Other"> Other</label>
   </fieldset>
+
+  <!-- NEW ELEMENT: Range Slider for Movie Score -->
+  <label for="rating">Your Personal Score (out of 10)</label>
+  <div class="slider-container">
+    <input type="range" name="rating" id="rating" min="1" max="10" step="0.5" value="8" oninput="this.nextElementSibling.value = this.value + ' / 10'">
+    <output class="slider-output">8 / 10</output>
+  </div>
 
   <label for="comments">Why is it your favorite?</label>
   <textarea name="comments" id="comments" rows="4" placeholder="Share your review..."></textarea>
@@ -155,7 +190,7 @@
 </form>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbyi6BQIRBOyGEFJtvalu9L-9db3rUTv4BNTGXOuewQ8lf48HEXj1O280gmEK0p9j1ezcQ/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbw6w37aKU5jirNFkgF5bPA58-q8fLIWjYc9-Bm8_zcA8SZt43eaw67leKzuT9jnfv2V/exec';
   const form = document.getElementById('googleForm');
 
   form.addEventListener('submit', e => {
@@ -164,6 +199,8 @@
       .then(response => {
         alert("Form submitted successfully!");
         form.reset();
+        // Reset slider output manually back to default value
+        document.querySelector('.slider-output').value = "8 / 10";
       })
       .catch(error => alert('Error!', error.message));
   });
@@ -171,3 +208,4 @@
 
 </body>
 </html>
+
